@@ -1,0 +1,43 @@
+﻿@page "/tarefa"
+@rendermode InteractiveServer
+
+<PageTitle>Tarefas</PageTitle>
+
+<h3>Tarefas (@tarefas.Count(t => t.IsDone))</h3>
+
+<ul>
+    @foreach (var tarefa in tarefas)
+    {
+        <li>
+            <input type="checkbox" @bind="tarefa.IsDone" />
+            <input type="text" @bind="tarefa.Title" />
+            <input type="button" @onclick="() => DeleteTarefa(tarefa)" value="Deletar" class="btn btn-danger">
+        </li>
+    }
+</ul>
+
+<input type="text" @bind="NovaTarefa">
+<button @onclick="AddTarefa" class="btn btn-primary">Adicionar Tarefa</button>
+
+@code {
+    private string? NovaTarefa;
+    private List<ItemTarefa> tarefas = [];
+
+    private void AddTarefa()
+    {
+        if (!string.IsNullOrWhiteSpace(NovaTarefa))
+        {
+            var TarefaParaAdicionar = new ItemTarefa
+            {
+                Title = NovaTarefa
+            };
+            tarefas.Add(TarefaParaAdicionar);
+            NovaTarefa = string.Empty;
+        }
+    }
+
+    private void DeleteTarefa(ItemTarefa Tarefa)
+    {
+        tarefas.Remove(Tarefa);
+    }
+}
